@@ -1,23 +1,7 @@
-import user from '..models/userModel.js';
+const getUserProfile = async (req, res) => {
+    res.send('Get user profile route');
+};
 
-export const getAllUsers = async (req, res){
-    try {
-        const users = await user.find();
-        res.status(200).json(users);
-    }catch(error){
-        res.status(500).json({
-            Message: "Error fetching users",
-            Error: error.message
-        })
-    }
-    }
-export const createUser = async(req, res) => {
-    try {
-        const newUser = new user(req.body);
-        const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
-    }catch(error){
-        res.status(500)
-    }
-    }
-}
+module.exports = {
+    getUserProfile
+};
