@@ -1,16 +1,22 @@
-import React, { useState, useEffect} from "react";
-
+import React from 'react';
 
 const Message = ({ message }) => {
-    const isUser = message.sender === 'user';
+  const isUser = message.sender === 'user';
 
-    return(
-        <div 
-           style={{
-              alignSelf: isUser ? 'flex-end' : 'flex-start',
-              backgroundColor: isUser ? '#DCF8C6' : '#EEE',
-              padding: '8px 12px',
-              borderRadius: 12,
-              margin: '4px 0'
-           }}
-    )
+  return (
+    <div
+      style={{
+        alignSelf: isUser ? 'flex-end' : 'flex-start',
+        backgroundColor: isUser ? '#DCF8C6' : '#EEE',
+        padding: '8px 12px',
+        borderRadius: 12,
+        margin: '4px 0',
+        maxWidth: '70%',
+      }}
+    >
+      {message.text}
+    </div>
+  );
+};
+
+export default Message;
