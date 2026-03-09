@@ -14,6 +14,10 @@ export const getAllUsers = async (req, res){
 export const createUser = async(req, res) => {
     try {
         const newUser = new user(req.body);
-        
+        const savedUser = await newUser.save();
+        res.status(201).json(savedUser);
+    }catch(error){
+        res.status(500)
+    }
     }
 }
