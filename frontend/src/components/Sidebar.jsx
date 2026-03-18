@@ -9,7 +9,6 @@ const Sidebar = ({ users }) => {
     </div>
   );
 };
-
 const styles = {
   sidebar: {
     width: '200px',
