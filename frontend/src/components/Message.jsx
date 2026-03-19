@@ -17,6 +17,6 @@ const Message = ({ message }) => {
       {message.text}
     </div>
   );
-};
+};///today
 
 export default Message;
