@@ -17,6 +17,6 @@ const Message = ({ message }) => {
       {message.text}
     </div>
   );
-};///today
+};///toda
 
 export default Message;
