@@ -1,8 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const { getMessages, sendMessage } = require('../controllers/chatController');
+const {
+    getRooms,
+    createRoom,
+    getOrCreateDM,
+    getMessages,
+    sendMessage,
+} = require('../controllers/chatController');
+const { protect } = require('../middleware/authMiddleware');
 
-router.get('/:roomId', getMessages);
-router.post('/send', sendMessage);
+router.use(protect);
+
+router.get('/rooms', getRooms);
+router.post('/rooms', createRoom);
+router.post('/dm', getOrCreateDM);
+router.get('/messages/:roomId', getMessages);
+router.post('/messages', sendMessage);
 
 module.exports = router;
