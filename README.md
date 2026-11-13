@@ -1,5 +1,9 @@
 # Multi-Chat App
 
+![Release](https://img.shields.io/badge/release-v1.0.0-blue.svg)
+![Updated](https://img.shields.io/badge/last%20updated-November%2013%2C%202026-brightgreen.svg)
+![Status](https://img.shields.io/badge/status-active-success.svg)
+
 A **modern, real-time multi-chat web application** with support for group channels, 1-on-1 direct messaging, media sharing, and more. Built with **React**, **Node.js**, **Socket.IO**, and **MongoDB**, designed for scalability and modern web experiences.  
 
 ---
