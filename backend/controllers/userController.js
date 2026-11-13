@@ -5,18 +5,19 @@ const User = require('../models/User');
 // @access  Private
 const getUsers = async (req, res) => {
     try {
-        const keyword = req.query.search
-            ? {
-                  $or: [
-                      { username: { $regex: req.query.search, $options: 'i' } },
-                      { email: { $regex: req.query.search, $options: 'i' } },
-                  ],
-              }
-            : {};
+        const query = {
+            username: { $exists: true, $nin: [null, ''] },
+            _id: { $ne: req.user._id },
+        };
 
-        // Find users, excluding currently logged in user if desired or including all
-        const users = await User.find(keyword)
-            .find({ _id: { $ne: req.user._id } })
+        if (req.query.search && req.query.search.trim()) {
+            query.$or = [
+                { username: { $regex: req.query.search.trim(), $options: 'i' } },
+                { email: { $regex: req.query.search.trim(), $options: 'i' } },
+            ];
+        }
+
+        const users = await User.find(query)
             .select('-password')
             .sort({ isOnline: -1, username: 1 });
 

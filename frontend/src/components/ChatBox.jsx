@@ -139,12 +139,13 @@ const ChatBox = ({
     };
 
     // Filter messages if search is active
-    const displayedMessages = searchQuery.trim()
-        ? messages.filter((m) =>
-              m.content?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              m.fileName?.toLowerCase().includes(searchQuery.toLowerCase())
+    const q = (searchQuery || '').trim().toLowerCase();
+    const displayedMessages = q
+        ? (messages || []).filter((m) =>
+              (m?.content || '').toLowerCase().includes(q) ||
+              (m?.fileName || '').toLowerCase().includes(q)
           )
-        : messages;
+        : (messages || []);
 
     // Determine room details
     const isDM = activeRoom?.isDirectMessage;

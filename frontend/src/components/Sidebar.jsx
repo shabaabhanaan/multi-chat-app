@@ -13,11 +13,11 @@ import {
 
 const Sidebar = ({
     currentUser,
-    rooms,
+    rooms = [],
     activeRoom,
     onSelectRoom,
-    allUsers,
-    onlineUserIds,
+    allUsers = [],
+    onlineUserIds = [],
     onSelectUserDM,
     onOpenCreateChannel,
     onOpenProfile,
@@ -27,22 +27,23 @@ const Sidebar = ({
 }) => {
     const [searchQuery, setSearchQuery] = useState('');
 
-    const channelRooms = rooms.filter((r) => !r.isDirectMessage);
+    const channelRooms = (rooms || []).filter((r) => r && !r.isDirectMessage);
+
+    const query = (searchQuery || '').trim().toLowerCase();
 
     const filteredChannels = channelRooms.filter((r) =>
-        r.name.toLowerCase().includes(searchQuery.toLowerCase())
+        (r?.name || '').toLowerCase().includes(query)
     );
 
-    const filteredUsers = allUsers.filter((u) => {
-        if (u._id === currentUser?._id) return false;
-        return (
-            u.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (u.status && u.status.toLowerCase().includes(searchQuery.toLowerCase()))
-        );
+    const filteredUsers = (allUsers || []).filter((u) => {
+        if (!u || u._id === currentUser?._id) return false;
+        const name = (u.username || '').toLowerCase();
+        const status = (u.status || '').toLowerCase();
+        return name.includes(query) || status.includes(query);
     });
 
     const isUserOnline = (userId) => {
-        return onlineUserIds.includes(userId);
+        return Boolean(userId && onlineUserIds.includes(userId));
     };
 
     return (
@@ -73,15 +74,15 @@ const Sidebar = ({
                     <img
                         src={
                             currentUser?.avatar ||
-                            `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser?.username}`
+                            `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser?.username || 'User'}`
                         }
-                        alt={currentUser?.username}
+                        alt={currentUser?.username || 'User'}
                         style={styles.currentUserAvatar}
                     />
                     <span style={styles.onlineBadge} />
                 </div>
                 <div style={styles.userInfo}>
-                    <span style={styles.currentUserName}>{currentUser?.username}</span>
+                    <span style={styles.currentUserName}>{currentUser?.username || 'User'}</span>
                     <span style={styles.currentUserStatus}>
                         {currentUser?.status || 'Online'}
                     </span>
@@ -173,7 +174,7 @@ const Sidebar = ({
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span style={styles.sectionTitle}>Direct Messages</span>
                             <span style={styles.countBadge}>
-                                {allUsers.filter((u) => u._id !== currentUser?._id && isUserOnline(u._id)).length} online
+                                {(allUsers || []).filter((u) => u && u._id !== currentUser?._id && isUserOnline(u._id)).length} online
                             </span>
                         </div>
                     </div>
@@ -184,11 +185,10 @@ const Sidebar = ({
                         ) : (
                             filteredUsers.map((user) => {
                                 const online = isUserOnline(user._id);
-                                // Check if active room is a DM with this user
                                 const isActive =
                                     activeRoom?.isDirectMessage &&
                                     activeRoom?.members?.some((m) =>
-                                        (m._id || m) === user._id
+                                        (m?._id || m) === user._id
                                     );
 
                                 return (
@@ -207,9 +207,9 @@ const Sidebar = ({
                                             <img
                                                 src={
                                                     user.avatar ||
-                                                    `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`
+                                                    `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username || 'User'}`
                                                 }
-                                                alt={user.username}
+                                                alt={user.username || 'User'}
                                                 style={styles.dmAvatar}
                                             />
                                             <span
@@ -220,7 +220,7 @@ const Sidebar = ({
                                             />
                                         </div>
                                         <div style={styles.dmInfo}>
-                                            <span style={styles.roomName}>{user.username}</span>
+                                            <span style={styles.roomName}>{user.username || 'User'}</span>
                                             {user.status && (
                                                 <span style={styles.dmStatusSnippet}>
                                                     {user.status}
